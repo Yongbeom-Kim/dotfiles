@@ -30,3 +30,9 @@ force_symlink "$PWD/vscode/settings.json" "$HOME/.config/Code/User/settings.json
 echo "Setting up Vim:"
 assert_command_found "vim"
 force_symlink "$PWD/vim/.vimrc" "$HOME/.vimrc"
+
+# Set up oh-my-zsh
+echo "Setting up oh-my-zsh..."
+assert_command_found "zsh"
+assert_command_found "conda" # I put conda in my .zshrc
+force_symlink "$PWD/oh-my-zsh/.zshrc" "$HOME/.zshrc"
