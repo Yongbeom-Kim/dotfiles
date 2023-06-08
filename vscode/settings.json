@@ -1,0 +1,63 @@
+{
+    "workbench.colorTheme": "Default Dark+",
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "files.exclude": {
+        "/.classpath": true,
+        "/.project": true,
+        "/.settings": true,
+        "/.factorypath": true
+    },
+    "redhat.telemetry.enabled": true,
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.python",
+        "editor.formatOnType": true
+    },
+    "java.home": "C:\\Program Files\\Eclipse Adoptium\\jdk-17.0.1.12-hotspot",
+    "java.help.firstView": "gettingStarted",
+    "tabnine.experimentalAutoImports": true,
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "python.linting.flake8Enabled": true,
+    "python.languageServer": "Pylance",
+    "python.linting.flake8CategorySeverity.E": "Information",
+    "python.linting.flake8Args": [
+        "--ignore=E501,W293"
+    ],
+    "python.linting.mypyEnabled": true,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "workbench.iconTheme": "vscode-icons",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "cSpell.userWords": [
+        "anki",
+        "cloze",
+        "clozify",
+        "Fung",
+        "IYCN",
+        "PLSQL",
+        "templater"
+    ],
+    "cSpell.caseSensitive": true,
+    "C_Cpp.intelliSenseEngineFallback": "Enabled",
+    "cSpell.enableFiletypes": [
+        "!cpp"
+    ],
+    "cmake.configureOnOpen": true,
+    "eslint.format.enable": true,
+    "[typescript]": {
+        "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+    },
+    "git.openRepositoryInParentFolders": "never",
+    "editor.formatOnSave": true
+}
