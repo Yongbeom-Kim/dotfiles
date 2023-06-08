@@ -3,17 +3,16 @@
     "editor.suggestSelection": "first",
     "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
     "files.exclude": {
-        "/.classpath": true,
-        "/.project": true,
-        "/.settings": true,
-        "/.factorypath": true
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
     },
     "redhat.telemetry.enabled": true,
     "[python]": {
         "editor.defaultFormatter": "ms-python.python",
         "editor.formatOnType": true
     },
-    "java.home": "C:\\Program Files\\Eclipse Adoptium\\jdk-17.0.1.12-hotspot",
     "java.help.firstView": "gettingStarted",
     "tabnine.experimentalAutoImports": true,
     "[javascript]": {
