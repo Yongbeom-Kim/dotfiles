@@ -1,10 +1,21 @@
 # Dotfiles
 
+My repo for dotfiles! Also backs up current dotfiles overwritten to be restored.
 
-My repo for dotfiles!
+## To Setup:
+Make sure the following are installed:
+- VS Code
+- Vim
+- Oh-My-Zsh
+- Conda (Miniconda)
 
-1. Install VS Code
-2. Install vim
-2. Install oh-my-zsh
-3. Install miniconda
+To set up configs,
+```bash
+./setup.sh
+```
+
+To restore old configs,
+```bash
+./restore.sh
+```
 
