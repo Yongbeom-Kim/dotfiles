@@ -50,7 +50,7 @@ def symlink_file_with_backup(src_path: Path, dst_path: Path, backup_path: Path):
     print(f"Creating symlink from {src_path} to {dst_path}")
     dst_path.parent.mkdir(parents=True, exist_ok=True)
 
-    if dst_path.exists():
+    if dst_path.exists() and not dst_path.is_symlink():
         print(f"{TERM['yellow']}{dst_path} already exists.{TERM['reset']}")
         print(f"{TERM['yellow']}Backing up {dst_path} to {backup_path}{TERM['reset']}")
         backup_path.unlink(missing_ok=True)
@@ -104,7 +104,8 @@ setup_configs = [
     SetupConfig("VS Code", ["code"], Path('./vscode/settings.json'), [XDG_CONFIG_HOME / "Code/User/settings.json"]),
     SetupConfig("Vim", ["vim"], Path("./vim/.vimrc"), [USER_HOME / ".vimrc"]),
     # Conda in zsh because I put conda in zshrc
-    SetupConfig("Oh My Zsh", ["zsh", "conda"], Path("./oh-my-zsh/.zshrc"), [USER_HOME / ".zshrc"])
+    SetupConfig("Oh My Zsh", ["zsh", "conda"], Path("./oh-my-zsh/.zshrc"), [USER_HOME / ".zshrc"]),
+    SetupConfig("Tmux", ["tmux"], Path("./tmux/.tmux.conf"), [XDG_CONFIG_HOME / ".tmux.conf"])
 ]
 
 if __name__ == '__main__':
