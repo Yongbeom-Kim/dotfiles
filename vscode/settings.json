@@ -6,7 +6,12 @@
       "**/.classpath": true,
       "**/.project": true,
       "**/.settings": true,
-      "**/.factorypath": true
+      "**/.factorypath": true,
+      "**/.trunk/*actions/": true,
+      "**/.trunk/*logs/": true,
+      "**/.trunk/*notifications/": true,
+      "**/.trunk/*out/": true,
+      "**/.trunk/*plugins/": true
     },
     "redhat.telemetry.enabled": true,
     "[python]": {
@@ -19,9 +24,10 @@
       "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "[json]": {
-      "editor.defaultFormatter": "vscode.json-language-features"
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": ["--max-line-length=100"],
     "python.languageServer": "Pylance",
     "python.linting.flake8CategorySeverity.E": "Information",
     "python.linting.flake8Args": ["--ignore=E501,W293"],
@@ -64,7 +70,19 @@
       "plaintext": true,
       "markdown": true,
       "scminput": false,
-      "cpp": false
-    }
+      "cpp": true
+    },
+    "C_Cpp.default.cppStandard": "c++17",
+    "trunk.trunkGrayOutNonBlockingIssues": false,
+    "files.watcherExclude": {
+      "**/.trunk/*actions/": true,
+      "**/.trunk/*logs/": true,
+      "**/.trunk/*notifications/": true,
+      "**/.trunk/*out/": true,
+      "**/.trunk/*plugins/": true
+    },
+    "editor.defaultFormatter": "trunk.io",
+    "editor.minimap.enabled": false,
+    "trunk.showPreexistingIssues": false
   }
   
