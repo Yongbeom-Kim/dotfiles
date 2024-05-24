@@ -104,7 +104,7 @@ setup_configs = [
     SetupConfig("VS Code", ["code"], Path('./vscode/settings.json'), [XDG_CONFIG_HOME / "Code/User/settings.json"]),
     SetupConfig("Vim", ["vim"], Path("./vim/.vimrc"), [USER_HOME / ".vimrc"]),
     # Conda in zsh because I put conda in zshrc
-    SetupConfig("Oh My Zsh", ["zsh", "conda"], Path("./oh-my-zsh/.zshrc"), [USER_HOME / ".zshrc"]),
+    SetupConfig("Oh My Zsh", ["zsh"], Path("./oh-my-zsh/.zshrc"), [USER_HOME / ".zshrc"]),
     SetupConfig("Tmux", ["tmux"], Path("./tmux/.tmux.conf"), [XDG_CONFIG_HOME / ".tmux.conf"]),
     SetupConfig("Pipy", ["pip"], Path("./pipy/pip.conf"), [USER_HOME / ".pip/pip.conf"])
 ]
