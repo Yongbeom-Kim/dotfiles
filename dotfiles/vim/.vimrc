@@ -1,3 +1,5 @@
+#!/usr/bin/env _copy_dotfile $HOME/.vimrc
+
 " Remap esc key
 lnoremap kj <C-[>
 inoremap jk <C-[>
