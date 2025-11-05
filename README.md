@@ -27,7 +27,7 @@ I've found that while different machines of mine share a *base* dotfile configur
 
 Copying files instead of symlinking them makes it easier to *import* existing dotfiles into the repo. For instance, if I have an existing, file to symlink, I'd have to move it into this repo and update the symlink to point to the new location.
 
-Instead, I use `cp` to copy the dotfiles into their respective locations. When I want to update a dotfile, I simply `pull` it into the repo under a gitignore-d `$DOTFILE.new` file, and then compare the diffs to see what changed.
+Instead, I use `cp` to copy the dotfiles into their respective locations. When I want to update a dotfile, I simply `cp` it back into the repo under a gitignore-d `$DOTFILE.new` file, and then compare the diffs to see what changed.
 
 ## How it works: Shebang Abuse
 
