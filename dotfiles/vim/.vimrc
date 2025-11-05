@@ -1,4 +1,4 @@
-#!/usr/bin/env _copy_dotfile $HOME/.vimrc
+#!/usr/bin/env -S _copy_dotfile ${HOME}/.vimrc
 
 " Remap esc key
 lnoremap kj <C-[>

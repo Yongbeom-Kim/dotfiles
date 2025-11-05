@@ -37,7 +37,7 @@ For instance, here is the first few lines of my `.vimrc` file in this repo:
 
 [`dotfiles/vim/.vimrc`](./dotfiles/vim/.vimrc)
 ```vim
-#!/usr/bin/env _copy_dotfile $HOME/.vimrc
+#!/usr/bin/env -S _copy_dotfile ${HOME}/.vimrc
 
 " Remap esc key
 lnoremap kj <C-[>
@@ -68,7 +68,7 @@ To pull dotfiles from the system into this repo, we can create a new file like t
 
 `./dotfiles/.zshrc` (new)
 ```zsh
-#!/usr/bin/env _copy_dotfile $HOME/.zshrc
+#!/usr/bin/env -S _copy_dotfile ${HOME}/.zshrc
 ```
 
 Now, running `make pull` copies the current `$HOME/.zshrc` into `./dotfiles/.zshrc.new`. 
@@ -89,7 +89,7 @@ This allows us to create a new dotfile by simply creating a new file in the `dot
 
 `dotfiles/.new_dotfile`
 ```zsh
-#!/usr/bin/env _copy_dotfile $HOME/some/path/to.new_dotfile
+#!/usr/bin/env -S _copy_dotfile ${HOME}/some/path/to.new_dotfile
 ```
 2. Run `make pull` to copy the current configuration file `dotfiles/.new_dotfile.new`
 3. Copy over specific changes from the new file over the old one
