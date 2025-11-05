@@ -61,11 +61,11 @@ pull() {
     echo -e "${GRAY}Successfully pulled $dst_path to $new_src_path.${RESET}"
 }
 
-if [[ "$MODE" == "push" ]]; then
+if [[ "${MODE:-}" == "push" ]]; then
     push
-elif [[ "$MODE" == "pull" ]]; then
+elif [[ "${MODE:-}" == "pull" ]]; then
     pull
 else
-    echo "MODE '$MODE' is not supported, only 'push' and 'pull' are supported."
-    exit 1
+    echo "Environment variable MODE is unbound, pushing by default"
+    push
 fi
