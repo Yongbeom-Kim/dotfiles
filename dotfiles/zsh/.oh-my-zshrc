@@ -80,14 +80,16 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-# User configuration
-
-
+# Common Configs (to be committed)
+# Ensure backspace works correctly in terminal (both ^H and ^? variants)
 stty erase '^H'
 stty erase '^?'
 
 
 ## MacOS-specific
+### Polyfill tac
 if ! which -s tac &> /dev/null; then
         alias tac='tail -r'
 fi
+
+# Machine-Specific Configs (to be unstaged)
