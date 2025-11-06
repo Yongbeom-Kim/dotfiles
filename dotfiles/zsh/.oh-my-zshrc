@@ -82,5 +82,12 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
+
 stty erase '^H'
 stty erase '^?'
+
+
+## MacOS-specific
+if which -s tac; then
+        alias tac='tail -r'
+fi
