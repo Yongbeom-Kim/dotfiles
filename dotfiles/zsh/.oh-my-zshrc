@@ -89,7 +89,7 @@ stty erase '^?'
 ## MacOS-specific
 ### Polyfill tac
 if ! which -s tac &> /dev/null; then
-        alias tac='tail -r'
+  alias tac='tail -r'
 fi
 
 # Machine-Specific Configs (to be unstaged)
