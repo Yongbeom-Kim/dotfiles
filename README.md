@@ -105,6 +105,13 @@ To set up a new machine with these dotfiles, download the dependencies, clone th
 2. Install additional dependencies (Oh My Zsh + plugins)
 3. Push dotfiles into their respective locations (backups on `$HOME/<dotfile>.bak`).
 
+### 3. Installing a specific dotfile only
+
+Just run the dotfile as an executable.
+```bash
+./dotfiles/vim/.vimrc
+```
+
 ## Notes about the dotfiles in this repo
 
 ### Zsh
