@@ -88,6 +88,6 @@ stty erase '^?'
 
 
 ## MacOS-specific
-if which -s tac; then
+if ! which -s tac &> /dev/null; then
         alias tac='tail -r'
 fi
