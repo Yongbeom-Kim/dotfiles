@@ -43,7 +43,15 @@ _trim_frontmatter() {
 _add_frontmatter() {
 	frontmatter="$1"
 	content="$2"
-	echo "$frontmatter"$"$content"
+
+	while [[ "$frontmatter" == *$'\n' ]]; do
+		frontmatter=${frontmatter%$'\n'}
+	done
+
+	while [[ "$content" == $'\n'* ]]; do
+		content=${content#$'\n'}
+	done
+	echo "${frontmatter%%}"$'\n\n'"$content"
 }
 
 _get_target() {
@@ -118,8 +126,6 @@ _restore_backup_dotfile() {
 _merge_files() {
 	base_path="$1"
 	other_file_path="$2"
-	echo_stderr "base_path: $base_path"
-	echo_stderr "other_file_path: $other_file_path"
 	if [[ ! -f "$base_path" ]]; then
 		echo -e "${RED}Source file $base_path does not exist.${RESET}"
 		return 1
@@ -130,7 +136,7 @@ _merge_files() {
 		return 1
 	fi
 
-	if ! which -s git; then
+	if ! command -v git >/dev/null 2>&1; then
 		echo -e "${RED}Git is not installed. Please install git first.${RESET}"
 		return 1
 	fi
@@ -190,6 +196,20 @@ restore_backup_file() {
 	rm "$backup_path"
 }
 
+backup_file() {
+	src_path=$1
+	src_path_content="$(cat "$src_path")"
+	backup_path="$(_get_backup_path "$src_path")"
+	frontmatter="$(_get_frontmatter "$src_path_content")"
+	dst_path="$(_get_target "$src_path_content")"
+	if ! _try_backup_file_with_frontmatter_if_exists "$backup_path" "$dst_path" "$frontmatter"; then
+		echo -e "${RED}Failed to backup $dst_path.${RESET}"
+		exit 1
+	fi
+
+	echo -e "${GRAY}Backup of $dst_path created at $backup_path.${RESET}"
+}
+
 merge_into_current_file() {
 	src_path=$1
 	src_path_content="$(cat "$src_path")"
@@ -226,6 +246,9 @@ main() {
 			;;
 		"restore")
 			restore_backup_file "$src_path"
+			;;
+		"backup")
+			backup_file "$src_path"
 			;;
 		*)
 			bootstrap_file "$src_path"
