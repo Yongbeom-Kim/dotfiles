@@ -1,0 +1,24 @@
+#!/usr/bin/env -S _copy_dotfile
+# target[Linux]: ${HOME}/.config/Cursor/User/settings.json
+
+{
+    "window.commandCenter": true,
+    "workbench.colorTheme": "Cursor Dark High Contrast",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "[go]": {
+        "editor.insertSpaces": false,
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        }
+    },
+    "editor.tabSize": 2,
+    "editor.insertSpaces": false,
+    "editor.fontLigatures": true,
+    "files.exclude": {
+        "**/.DS_Store": false
+    },
+    "diffEditor.codeLens": true,
+    "editor.fontFamily": "'JetBrains Mono', 'Droid Sans Mono', 'monospace', monospace"
+}
