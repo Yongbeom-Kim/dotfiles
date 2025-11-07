@@ -9,6 +9,6 @@ for dir in /usr/local/bin /usr/bin "$HOME/.local/bin" "$HOME/bin" /opt/local/bin
   fi
 done
 
-cp scripts/_copy_dotfile.sh "$target"
+cp src/_copy_dotfile.sh "$target"
 chmod +x "$target"
 echo "Installed _copy_dotfile to $target. Ensure $(dirname "$target") is in your \$PATH."

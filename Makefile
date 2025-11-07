@@ -1,20 +1,21 @@
 SHELL := /usr/bin/env bash
 
-.PHONY: install pull push
+.PHONY: install pull push clean test
 
-all: install_script install_dependencies push
-
-install_script:
+install:
 	sudo ./scripts/install_copy_dotfile.sh
 
 install_dependencies:
 	./scripts/install_dependencies.sh
 
-pull:
-	env MODE=pull ./scripts/run_dotfiles.sh
+bootstrap:
+	./scripts/run_dotfiles.sh bootstrap
 
-push:
-	env MODE=push ./scripts/run_dotfiles.sh
+undo_bootstrap:
+	./scripts/run_dotfiles.sh undo
 
-clean:
-	find dotfiles -name '*.new' -exec rm {} \;
+merge:
+	./scripts/run_dotfiles.sh merge
+
+remove_backups:
+	find dotfiles -name '*.bak' -exec rm {} \;

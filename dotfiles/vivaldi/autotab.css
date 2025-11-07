@@ -1,4 +1,5 @@
-#!/usr/bin/env -S _copy_dotfile ${HOME}/.vivaldi/css/autotab.css
+#!/usr/bin/env -S _copy_dotfile
+# target: ${HOME}/.vivaldi/css/autotab.css
 /* 
 version: 1.0.5
 variant: Auto Hide Tabbar

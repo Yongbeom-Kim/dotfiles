@@ -1,0 +1,17 @@
+#!/usr/bin/env -S _copy_dotfile
+# target: ${HOME}/Library/Application\ Support/Trae/User/settings.json
+{
+  "workbench.colorTheme": "Deep Blue",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "AI.toolcall.confirmMode": "autoRun",
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "diffEditor.ignoreTrimWhitespace": false,
+  "diffEditor.renderSideBySide": false,
+  "editor.fontLigatures": true,
+  "git.confirmSync": false,
+  "editor.tabSize": 2
+}
