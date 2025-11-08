@@ -13,7 +13,7 @@ The `pull` operation is done with `git merge-file`, so it will work exactly as h
 ## Prerequisites
 
 - A Unix-like system
-- `make`, `bash`, `zsh`, and `git` installed and available in your `$PATH`
+- `make`, `bash`, and `git` installed and available in your `$PATH`
 
 ## How to use
 
@@ -191,10 +191,6 @@ Just create a new file `./dotfiles/zsh/.zshrc`:
 Run `make pull`, and pull your changes into this repo. Your dotfile is now version-tracked.
 
 ## Personal Notes
-
-### Zsh
-
-- `zsh` must be installed before running anything.
 
 ### Vivaldi
 
