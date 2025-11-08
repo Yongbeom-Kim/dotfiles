@@ -74,7 +74,7 @@ inoremap jk <C-[>
 
 The script `_copy_dotfile` parses the target from the starting "frontmatter" (leading line of `#`)
 
-And we define the following
+And we define the following:
 
 ```bash
 _copy_dotfile FILE pull # pulls file from the target into this file
@@ -82,6 +82,10 @@ _copy_dotfile FILE push # push this file to target and make a backup
 _copy_dotfile FILE backup # make a backup from target file
 _copy_dotfile FILE restore # restore target file from backup
 ```
+
+So, you can just do `FILE (pull/push/backup/restore)` as an executable.
+
+The `make (pull/push/backup/restore_backup)` just loops through the dotfiles directory and executes every file.
 
 ### Shebang Syntax
 
