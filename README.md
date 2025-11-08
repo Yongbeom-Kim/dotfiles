@@ -85,7 +85,15 @@ _copy_dotfile FILE restore # restore target file from backup
 
 So, you can just do `FILE (pull/push/backup/restore)` as an executable.
 
-The `make (pull/push/backup/restore_backup)` just loops through the dotfiles directory and executes every file.
+The `make (pull/push/backup/restore_backup)` just loops through the dotfiles directory and executes every file with something like this:
+
+```bash
+find dotfiles -type f -not -name '*.new' -not -name '*.bak' -not -name '*.tmp' -not -name '.DS_Store' -print0 | while IFS= read -r -d '' f; do
+  chmod +x "$f"
+  echo "Running $f"
+  "./$f" "$mode" || true # ignore errors and try to run every file
+done
+```
 
 ### Shebang Syntax
 
