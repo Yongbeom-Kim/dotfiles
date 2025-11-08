@@ -260,6 +260,8 @@ pull_file_from_target() {
 
 	echo -e "${GRAY}file $temp_path merged into $src_path. Temporary file $temp_path removed.${RESET}"
 	rm "$temp_path"
+
+	_file_assert_no_merge_conflicts $temp_path || true
 }
 
 

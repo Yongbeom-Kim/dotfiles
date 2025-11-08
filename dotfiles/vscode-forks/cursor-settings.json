@@ -1,5 +1,6 @@
 #!/usr/bin/env -S _copy_dotfile
 # target[Linux]: ${HOME}/.config/Cursor/User/settings.json
+# target[Darwin]: ${HOME}/Library/Application\ Support/Cursor/User/settings.json
 
 {
     "window.commandCenter": true,

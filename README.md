@@ -2,117 +2,178 @@
 
 Personal dotfiles with a simple, reproducible push/pull workflow.
 
+This is a git repo.
+
+Think of your configuration files (e.g. `~/.vimrc`) as a remote origin.
+
+When starting off, `make pull`, fix conflicts, and `make push` to synchronize existing dotfiles with those in this repo.
+
+The `pull` operation is done with `git merge-file`, so it will work exactly as how your Git merges go.
+
 ## Prerequisites
 
 - A Unix-like system
 - `make`, `bash`, `zsh`, and `git` installed and available in your `$PATH`
 
-
 ## How to use
 
-First, install `zsh`
+| Command                     | What it does                                                                                                                                            |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `make`                      | List all commands                                                                                                                                       |
+| `make install`              | Install the `_copy_dotfile` script                                                                                                                      |
+| `make install_dependencies` | Install some dependencies and programs I like                                                                                                           |
+| `make pull`                 | Pull all dotfiles from their target locations, and merge it into the dotfiles in this repo                                                              |
+| `make push`                 | Push all dotfiles from this repo into target locations. Backups in `<DOTFILE_PATH>.bak`. If a backup exists, this command will fail for the given file. |
+| `make backup`               | Create backups in this repo. Backups in `<DOTFILE_PATH>.bak`. If a backup exists, this command will fail for the given file.                            |
+| `make restore_backup`       | Restore dotfiles from their backups in this repo.                                                                                                       |
+| `make remove_backups`       | Remove backups in this repo.                                                                                                                            |
 
-| Task                        | Command                     | Description                                                                          |
-|-----------------------------|-----------------------------|--------------------------------------------------------------------------------------|
-| Install Everything          | `make install`              | Installs `/usr/local/bin/_copy_dotfile`, installs dependencies, then pushes dotfiles |
-| Install Dependencies        | `make install_dependencies` | Installs some tools I use (Oh My Zsh + plugins)                                      |
-| Install Dotfiles            | `make push`                 | Push dotfiles into their respective locations into the system                        |
-| Get Current System Dotfiles | `make pull`                 | Creates `*.new` files next to the originals in `dotfiles/`                           |
-| Clean temporary files       | `make clean`                | Removes all `*.new` files in `dotfiles/`                                            |
+If want to install a specific dotfile at `./dotfile/FILE`:
 
+| Command                         | What it does                                                           |
+| ------------------------------- | ---------------------------------------------------------------------- |
+| `./dotfile/FILE pull`           | Pull this dotfile's target into `./dotfile/FILE`, and try to merge it. |
+| `./dotfile/FILE push`           | Push `./dotfile/FILE` into its target location, make a backup          |
+| `./dotfile/FILE backup`         | Create a backup for this dotfile. Backup is in `./dotfile/FILE.bak`    |
+| `./dotfile/FILE restore_backup` | Restore this dotfile's target from its backup in `./dotfile/FILE.bak`  |
 
-### Why `cp`, not `ln -s`?
+## How this repo works
 
-I've found that while different machines of mine share a *base* dotfile configuration, I also have my machine-specific configurations. For instance, my work-issued laptop often has `.zshrc` configurations that I don't want to commit to this repo.
+### Some context about Shebangs
 
-Copying files instead of symlinking them makes it easier to *import* existing dotfiles into the repo. For instance, if I have an existing, file to symlink, I'd have to move it into this repo and update the symlink to point to the new location.
+If you have a file like
+`./some_file`
 
-Instead, I use `cp` to copy the dotfiles into their respective locations. When I want to update a dotfile, I simply `cp` it back into the repo under a gitignore-d `$DOTFILE.new` file, and then compare the diffs to see what changed.
+```bash
+#!SOMETHING_HERE
+```
 
-## How it works: Shebang Abuse
+And you do:
+```bash
+# If you run this
+./some_file
 
-This repo avoids having to keep track of dotfile locations by abusing shebangs (`#!`) to manage the location of each file.
+# It is equivalent to doing
+SOMETHING_HERE ./some_file
+```
 
-For instance, here is the first few lines of my `.vimrc` file in this repo:
+### Dotfiles
 
-[`dotfiles/vim/.vimrc`](./dotfiles/vim/.vimrc)
+I make every dotfile executable by prepending a shebang to it, something like:
+
 ```vim
-#!/usr/bin/env -S _copy_dotfile ${HOME}/.vimrc
+#!/usr/bin/env -S _copy_dotfile
+# target: ${HOME}/.vimrc
 
 " Remap esc key
 lnoremap kj <C-[>
 inoremap jk <C-[>
 
-" more config lines here
+" More things below
 ```
 
-When I run this as a script:
+The script `_copy_dotfile` parses the target from the starting "frontmatter" (leading line of `#`)
+
+And we define the following
 
 ```bash
-./dotfiles/.vimrc
+_copy_dotfile FILE pull # pulls file from the target into this file
+_copy_dotfile FILE push # push this file to target and make a backup
+_copy_dotfile FILE backup # make a backup from target file
+_copy_dotfile FILE restore # restore target file from backup
 ```
 
-This is equivalent to running 
+### Shebang Syntax
+
+The basic syntax for the executable dotfile looks like this.
+
+The `# target: <PATH>` line specifies where the dotfile target is.
+You are only allowed to specify one target, or the parser will throw an error.
+
+[`./dotfile/vim/.vimrc`](./dotfiles/vim/.vimrc)
+```bash
+#!/usr/bin/env -S _copy_dotfile
+# target: ${HOME}/.vimrc
+
+CONTENTS HERE
+```
+
+For OS-specific targets, you can do something like this:
+
+[`dotfiles/vscode-forks/cursor-settings.json`](./dotfiles/vscode-forks/cursor-settings.json)
+```bash
+#!/usr/bin/env -S _copy_dotfile
+# target[Linux]: ${HOME}/.config/Cursor/User/settings.json
+# target[Darwin]: ${HOME}/Library/Application\ Support/Cursor/User/settings.json
+
+{
+```
+
+The OS is checked with the value of `uname -s`.
 
 ```bash
-/usr/bin/env _copy_dotfile '$HOME/.vimrc' ./dotfiles/.vimrc
+➜  dotfiles git:(main) uname -s                                                     
+Linux
+
+# So your target should be
+# target[Linux]: PATH
 ```
 
-The first argument now serves as the target location, and the second argument as the source location, and the [script](./scripts/_copy_dotfile.sh) will back up the source file (`SOURCE_FILE.bak`) if it exists, then copy the source file to the target location.
+## Why this design?
 
-To account for languages where `#` does not mark the start of a comment, the script strips the first line in any file copied.
+### Colocation and Shebangs
 
-### Pulling Dotfiles
+One of my biggest frustration with dotfile managers is that you typically have some arrangement like this:
 
-To pull dotfiles from the system into this repo, we can create a new file like this:
+- `./dotfiles/vim/.vimrc` - your vimrc file
+- `./scripts/bootstrap.sh` - some kind of script to `cp` or `ln -s` the files in this repo to their target destination.
 
-`./dotfiles/.zshrc` (new)
-```zsh
-#!/usr/bin/env -S _copy_dotfile ${HOME}/.zshrc
-```
+But where do you keep the information that maps `./dotfiles/vim/.vimrc` --> `$HOME/.vimrc`?
 
-Now, running `make pull` copies the current `$HOME/.zshrc` into `./dotfiles/.zshrc.new`. 
+Typically, the common approach is to keep some kind of central store of this information, a mapping that maps every file in your repo to its destination.
+You might also come up with some abstractions, such as every file in `./dotfiles/zshrc/*` is appended to the end of your `.zshrc`.
 
-We can then compare the diffs to see what changed, and copy over specific changes from the new file over the old one.
+I _hate_ this. The result of this design is that to add _one_ configuration file, you go and edit _two_ things. Why can't it be one?
 
-With this, the dotfile locations and dotfile contents are now colocated in this repo, and we can easily keep track of changes to our dotfiles.
+In my setup, every dotfile is an executable that installs itself into its intended target location.
 
-## Workflows
+### Why `cp`, not `ln -s`?
 
-This allows us to have the following workflows:
+Well, first of all, my shebang approach is not compatible with symlinks, because I need to trim the starting shebang
 
-### 1. Creating a new dotfile
+When I first created my dotfile manager, I was sold the idea that having
+this setup where `$HOME/.vimrc` symlinks to `$REPO/dotfiles/vim/vimrc`
+is the holy grail of dotfile management.
 
-This allows us to create a new dotfile by simply creating a new file in the `dotfiles/` directory, and adding the shebang line. It would work as follows:
+When you go to edit the dotfiles, the changes get magically synced to your repo. `git commit -a`, `git push` and you can sync your changes everywhere!
 
-1. Create a new file in the `dotfiles/` directory:
+I think this is not quite the best practice.
 
-`dotfiles/.new_dotfile`
-```zsh
-#!/usr/bin/env -S _copy_dotfile ${HOME}/some/path/to.new_dotfile
-```
-2. Run `make pull` to copy the current configuration file `dotfiles/.new_dotfile.new`
-3. Copy over specific changes from the new file over the old one
-4. Commit and push the changes in this repo.
+First of all, are you just going to run `git commit -am` on a cronjob? You still need to manually commit. This manual step never goes away.
 
-To *update* a dotfile, just do steps 2-4.
+I've also found that, for me, while different machines share a _base_ dotfile configuration,
+I also have other machine-specific configurations.
 
-### 2. Setting up a new machine
+For instance, my work-issued laptop often has `.zshrc` configurations that I don't want to commit to this repo.
+`cp` is a good alternative that _decouples_ the source and destination dotfiles, that make managing them easier, and more intentional.
 
-To set up a new machine with these dotfiles, download the dependencies, clone this repo, and just run `make install`. This will:
+### Easy Imports
 
-1. Install `/usr/local/bin/_copy_dotfile`
-2. Install additional dependencies (Oh My Zsh + plugins)
-3. Push dotfiles into their respective locations (backups on `$HOME/<dotfile>.bak`).
+This kind of push-pull workflow also makes it easier to _import_ existing dotfiles into the repo.
 
-### 3. Installing a specific dotfile only
+Let's say I just installed `zsh`, set it up, and want to create a new dotfile entry.
 
-Just run the dotfile as an executable.
+Just create a new file `./dotfiles/zsh/.zshrc`:
+
 ```bash
-./dotfiles/vim/.vimrc
+#!/usr/bin/env -S _copy_dotfile
+# target: ${HOME}/.vimrc
+
 ```
 
-## Notes about the dotfiles in this repo
+Run `make pull`, and pull your changes into this repo. Your dotfile is now version-tracked.
+
+## Personal Notes
 
 ### Zsh
 
@@ -120,4 +181,4 @@ Just run the dotfile as an executable.
 
 ### Vivaldi
 
-- I [mod](https://forum.vivaldi.net/topic/10549/modding-vivaldi) my Vivaldiw with CSS files. Ensure the "Custom UI Modifications" is `<YOUR_HOME_DIRECTORY>/.vivaldi/css`
+- I [mod](https://forum.vivaldi.net/topic/10549/modding-vivaldi) my Vivaldi with CSS files. Ensure the "Custom UI Modifications" is `<YOUR_HOME_DIRECTORY>/.vivaldi/css`
