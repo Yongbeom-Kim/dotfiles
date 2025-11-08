@@ -1,4 +1,4 @@
-#!/usr/bin/env -S _copy_dotfile
+#!/usr/bin/env _copy_dotfile
 # target: ${HOME}/.zshrc
 
 # If you come from bash you might have to change your $PATH.

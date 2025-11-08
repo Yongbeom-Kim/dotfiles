@@ -46,7 +46,7 @@
 # EOF
 # )
 #     fm_source=$(cat <<'EOF'
-# #!/usr/bin/env -S _copy_dotfile arg1 arg2
+# #!/usr/bin/env _copy_dotfile arg1 arg2
 # # target: /path/one
 # # target[Darwin]: /path/darwin
 # First non-frontmatter content in source file
@@ -54,7 +54,7 @@
 # EOF
 # )
 #     expected_output=$(cat <<'EOF'
-# #!/usr/bin/env -S _copy_dotfile arg1 arg2
+# #!/usr/bin/env _copy_dotfile arg1 arg2
 # # target: /path/one
 # # target[Darwin]: /path/darwin
 

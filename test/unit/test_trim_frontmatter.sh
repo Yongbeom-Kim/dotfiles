@@ -34,7 +34,7 @@
 # # Example: "#1" "<content>" "#2" => trim only "#1"
 # test_trim_frontmatter_preserves_later_comments() {
 #     input=$(cat <<'EOF'
-# #!/usr/bin/env -S _copy_dotfile arg1 arg2
+# #!/usr/bin/env _copy_dotfile arg1 arg2
 # # target: /path/one
 # # target[Darwin]: /path/darwin
 # First real content line

@@ -62,7 +62,7 @@ SOMETHING_HERE ./some_file
 I make every dotfile executable by prepending a shebang to it, something like:
 
 ```vim
-#!/usr/bin/env -S _copy_dotfile
+#!/usr/bin/env _copy_dotfile
 # target: ${HOME}/.vimrc
 
 " Remap esc key
@@ -96,7 +96,7 @@ You are only allowed to specify one target, or the parser will throw an error.
 
 [`./dotfile/vim/.vimrc`](./dotfiles/vim/.vimrc)
 ```bash
-#!/usr/bin/env -S _copy_dotfile
+#!/usr/bin/env _copy_dotfile
 # target: ${HOME}/.vimrc
 
 CONTENTS HERE
@@ -106,7 +106,7 @@ For OS-specific targets, you can do something like this:
 
 [`dotfiles/vscode-forks/cursor-settings.json`](./dotfiles/vscode-forks/cursor-settings.json)
 ```bash
-#!/usr/bin/env -S _copy_dotfile
+#!/usr/bin/env _copy_dotfile
 # target[Linux]: ${HOME}/.config/Cursor/User/settings.json
 # target[Darwin]: ${HOME}/Library/Application\ Support/Cursor/User/settings.json
 
@@ -170,7 +170,7 @@ Let's say I just installed `zsh`, set it up, and want to create a new dotfile en
 Just create a new file `./dotfiles/zsh/.zshrc`:
 
 ```bash
-#!/usr/bin/env -S _copy_dotfile
+#!/usr/bin/env _copy_dotfile
 # target: ${HOME}/.vimrc
 
 ```

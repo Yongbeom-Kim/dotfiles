@@ -127,7 +127,7 @@ unset test_handle_spaces_in_target_path
 
 test_tmux_conf_file() {
     input=$(cat <<'EOF'
-#!/usr/bin/env -S _copy_dotfile ${HOME}/.tmux.conf
+#!/usr/bin/env _copy_dotfile ${HOME}/.tmux.conf
 # target: ${HOME}/.tmux.conf
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-sensible'

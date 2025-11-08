@@ -1,7 +1,7 @@
 #!/bin/bash
 
 __TMUX_FILE_FRONTMATTER=$(cat <<EOF
-#!/usr/bin/env -S _copy_dotfile
+#!/usr/bin/env _copy_dotfile
 # target: \${HOME}/.tmux.conf
 EOF
 )

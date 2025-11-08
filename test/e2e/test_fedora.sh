@@ -1,4 +1,4 @@
-#!/usr/bin/env -S docker run -it fedora:42
+#!/usr/bin/env docker run -it fedora:42
 # HELPER_PATH="${GIT_ROOT_DIR}/test/e2e/helpers.sh"
 
 # IMAGE="fedora:42"
@@ -10,7 +10,7 @@ bash
 # d_fs_install_dotfile_script
 
 # tmux_file_frontmatter=$(cat <<EOF
-# #!/usr/bin/env -S _copy_dotfile
+# #!/usr/bin/env _copy_dotfile
 # # target: \${HOME}/.tmux.conf
 # EOF
 # )

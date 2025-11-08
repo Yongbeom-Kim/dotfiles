@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-USAGE="Usage: use as '#!/usr/bin/env -S _copy_dotfile DST_PATH' as the shebang in a script.
+USAGE="Usage: use as '#!/usr/bin/env _copy_dotfile DST_PATH' as the shebang in a script.
 Running the script will copy the contents of the script to DST_PATH."
 
 BOLD="\033[1m"
