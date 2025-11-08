@@ -19,6 +19,11 @@ _get_backup_path() {
 	echo "$src_path.bak"
 }
 
+_get_temp_path() {
+	src_path="$1"
+	echo "$src_path.tmp"
+}
+
 # String manipulation (file parsing)
 
 _get_frontmatter() {
@@ -85,6 +90,18 @@ _get_target() {
 
 # File Manipulation
 
+GIT_CONFLICT_START_MARKER="<<<<<<< "
+GIT_CONFLICT_END_MARKER=">>>>>>> "
+
+_file_assert_no_merge_conflicts() {
+	file_to_check="$1"
+	if ! sed -n "/^${GIT_CONFLICT_START_MARKER}/q1" "$file_to_check"; then
+		echo -e "${RED}Merge conflict marker detected in $file_to_check. Please resolve conflicts before proceeding.${RESET}"
+		sed -n "/^${GIT_CONFLICT_START_MARKER}/,/^${GIT_CONFLICT_END_MARKER}/p" "$file_to_check"
+		return 1
+	fi
+}
+
 _try_backup_file_with_frontmatter_if_exists() {
 	backup_path="$1"
 	existing_path="$2"
@@ -104,7 +121,7 @@ _try_backup_file_with_frontmatter_if_exists() {
 	echo "$backup_content" > "$backup_path"
 }
 
-_try_bootstrap_dotfile() {
+_try_push_dotfile() {
 	src_path="$1"
 	dst_path="$2"
 	src_content="$(cat "$src_path")"
@@ -146,8 +163,13 @@ _merge_files() {
 
 # Command interface
 
-bootstrap_file() {
+push_file_to_target() {
 	src_path=$1
+
+	if ! _file_assert_no_merge_conflicts "$src_path"; then
+		echo -e "${RED}Error: Merge conflict marker detected in $src_path. Aborting push.${RESET}"
+		exit 1
+	fi
 		
 	src_path_content="$(cat "$src_path")"
 	backup_path="$(_get_backup_path "$src_path")"
@@ -169,8 +191,8 @@ bootstrap_file() {
 		exit 1
 	fi
 
-	if ! _try_bootstrap_dotfile "$src_path" "$dst_path"; then
-		echo -e "${RED}Failed to bootstrap $dst_path.${RESET}"
+	if ! _try_push_dotfile "$src_path" "$dst_path"; then
+		echo -e "${RED}Failed to push into $dst_path.${RESET}"
 		exit 1
 	fi
 }
@@ -183,6 +205,11 @@ restore_backup_file() {
 	dst_path="$(_get_target "$src_path_content")"
 
 	echo -e "${BOLD}Restoring $backup_path to $dst_path.${RESET}"
+
+	if ! _file_assert_no_merge_conflicts "$backup_path"; then
+		echo -e "${RED}Error: Merge conflict marker detected in $backup_path. Aborting restore.${RESET}"
+		exit 1
+	fi
 
 	if [[ ! -f "$backup_path" ]]; then
 		echo -e "${GRAY}Backup location $backup_path does not exist, skip restore.${RESET}"
@@ -210,29 +237,29 @@ backup_file() {
 	echo -e "${GRAY}Backup of $dst_path created at $backup_path.${RESET}"
 }
 
-merge_into_current_file() {
+pull_file_from_target() {
 	src_path=$1
 	src_path_content="$(cat "$src_path")"
 	dst_path="$(_get_target "$src_path_content")"
-	backup_path="$(_get_backup_path "$src_path")"
+	temp_path="$(_get_temp_path "$src_path")"
 	frontmatter="$(_get_frontmatter "$src_path_content")"
 
-	if [[ ! -f "$backup_path" ]]; then
-		echo -e "${GRAY}Backup location $backup_path does not exist, backing up $dst_path.${RESET}"
-		
-		if ! _try_backup_file_with_frontmatter_if_exists "$backup_path" "$dst_path" "$frontmatter"; then
-			echo -e "${RED}Failed to backup $dst_path.${RESET}"
-			exit 1
-		fi
+	if [[ -f "$temp_path" ]]; then
+		echo -e "${GRAY}Temporary file $temp_path exists, removing $temp_path.${RESET}"
 	fi
-		
-	if ! _merge_files "$src_path" "$backup_path"; then
-		echo -e "${RED}Failed to merge $backup_path into $src_path.${RESET}"
+
+	if ! _try_backup_file_with_frontmatter_if_exists "$temp_path" "$dst_path" "$frontmatter"; then
+		echo -e "${RED}Failed to backup $dst_path.${RESET}"
 		exit 1
 	fi
 
-	echo -e "${GRAY}file $backup_path merged into $src_path. Backup file $backup_path removed.${RESET}"
-	rm "$backup_path"
+	if ! _merge_files "$src_path" "$temp_path"; then
+		echo -e "${RED}Failed to merge $temp_path into $src_path.${RESET}"
+		exit 1
+	fi
+
+	echo -e "${GRAY}file $temp_path merged into $src_path. Temporary file $temp_path removed.${RESET}"
+	rm "$temp_path"
 }
 
 
@@ -241,8 +268,8 @@ main() {
 	MODE="${2:-}"
 
 	case "${MODE:-}" in
-		"merge")
-			merge_into_current_file "$src_path"
+		"pull")
+			pull_file_from_target "$src_path"
 			;;
 		"restore")
 			restore_backup_file "$src_path"
@@ -250,9 +277,12 @@ main() {
 		"backup")
 			backup_file "$src_path"
 			;;
-		*)
-			bootstrap_file "$src_path"
+		"push")
+			push_file_to_target "$src_path"
 			;;
+		*)
+			echo -e "${RED}Error:${RESET} Invalid or missing mode argument.\nUsage: <source_file> {push|backup|restore|merge}${RESET}"
+			exit 1
 	esac
 }
 

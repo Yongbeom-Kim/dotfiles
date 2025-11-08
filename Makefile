@@ -11,17 +11,17 @@ install: ##  Install _copy_dotfile script
 install_dependencies: ## Install dependencies I like
 	./scripts/install_dependencies.sh
 
-bootstrap: ## Bootstrap all dotfiles
-	./scripts/run_dotfiles.sh bootstrap
+push: ## Push dotfiles into their target locations
+	./script/run_dotfiles.sh push
 
-undo_bootstrap: ## Undo bootstrap, and restore backups of all dotfiles
-	./scripts/run_dotfiles.sh undo
+pull: ## Pull dotfiles from target locations into this repo, try to merge them
+	./scripts/run_dotfiles.sh pull
 
-merge: ## Merge local dotfiles into this repo
-	./scripts/run_dotfiles.sh merge
-
-backup: ## Do a simple backup of dotfiles
+backup: ## Do a simple backup of existing target dotfiles
 	./scripts/run_dotfiles.sh backup
+
+restore_backup: ## Restore backups of all dotfiles
+	./scripts/run_dotfiles.sh undo
 
 remove_backups: ## Remove backups of dotfiles in this repo
 	find dotfiles -name '*.bak' -exec rm {} \;
