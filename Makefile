@@ -12,7 +12,7 @@ install_dependencies: ## Install dependencies I like
 	./scripts/install_dependencies.sh
 
 push: ## Push dotfiles into their target locations
-	./script/run_dotfiles.sh push
+	./scripts/run_dotfiles.sh push
 
 pull: ## Pull dotfiles from target locations into this repo, try to merge them
 	./scripts/run_dotfiles.sh pull
@@ -20,8 +20,11 @@ pull: ## Pull dotfiles from target locations into this repo, try to merge them
 backup: ## Do a simple backup of existing target dotfiles
 	./scripts/run_dotfiles.sh backup
 
-restore_backup: ## Restore backups of all dotfiles
-	./scripts/run_dotfiles.sh undo
+merge_backups: ## Merge backups into the source dotfiles; remove dotfiles.
+	./scripts/run_dotfiles.sh merge_backup
+
+restore_backups: ## Restore backups of all dotfiles
+	./scripts/run_dotfiles.sh restore
 
 remove_backups: ## Remove backups of dotfiles in this repo
 	find dotfiles -name '*.bak' -exec rm {} \;

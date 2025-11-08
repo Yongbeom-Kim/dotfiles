@@ -264,6 +264,23 @@ pull_file_from_target() {
 	_file_assert_no_merge_conflicts $temp_path || true
 }
 
+merge_backup() {
+	src_path="$1"
+	backup_path="$(_get_backup_path "$src_path")"
+
+	if [[ ! -f "$backup_path" ]]; then
+		echo -e "${RED}No backup exists for $src_path (${backup_path}).${RESET}"
+		exit 1
+	fi
+	if ! _merge_files "$src_path" "$backup_path"; then
+		echo -e "${RED}Failed to merge backup $backup_path into $src_path.${RESET}"
+		exit 1
+	fi
+
+	echo -e "${GRAY}Backup $backup_path merged into $src_path.${RESET}"
+	rm "$backup_path"
+}
+
 
 main() {
 	src_path="$(eval echo \"${1:-}\")"
@@ -281,6 +298,9 @@ main() {
 			;;
 		"push")
 			push_file_to_target "$src_path"
+			;;
+		"merge_backup")
+			merge_backup "$src_path"
 			;;
 		*)
 			echo -e "${RED}Error:${RESET} Invalid or missing mode argument.\nUsage: <source_file> {push|backup|restore|merge}${RESET}"

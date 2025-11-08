@@ -24,8 +24,9 @@ The `pull` operation is done with `git merge-file`, so it will work exactly as h
 | `make install_dependencies` | Install some dependencies and programs I like                                                                                                           |
 | `make pull`                 | Pull all dotfiles from their target locations, and merge it into the dotfiles in this repo                                                              |
 | `make push`                 | Push all dotfiles from this repo into target locations. Backups in `<DOTFILE_PATH>.bak`. If a backup exists, this command will fail for the given file. |
-| `make backup`               | Create backups in this repo. Backups in `<DOTFILE_PATH>.bak`. If a backup exists, this command will fail for the given file.                            |
-| `make restore_backup`       | Restore dotfiles from their backups in this repo.                                                                                                       |
+| `make backup`               | Merge backups into the source dotfiles; remove dotfiles. Backups in `<DOTFILE_PATH>.bak`.                                                               |
+| `make merge_backups`        | Restore dotfiles from their backups in this repo.                                                                                                       |
+| `make restore_backups`      | Restore dotfiles from their backups in this repo.                                                                                                       |
 | `make remove_backups`       | Remove backups in this repo.                                                                                                                            |
 
 If want to install a specific dotfile at `./dotfile/FILE`:
@@ -33,9 +34,10 @@ If want to install a specific dotfile at `./dotfile/FILE`:
 | Command                         | What it does                                                           |
 | ------------------------------- | ---------------------------------------------------------------------- |
 | `./dotfile/FILE pull`           | Pull this dotfile's target into `./dotfile/FILE`, and try to merge it. |
-| `./dotfile/FILE push`           | Push `./dotfile/FILE` into its target location, make a backup          |
-| `./dotfile/FILE backup`         | Create a backup for this dotfile. Backup is in `./dotfile/FILE.bak`    |
-| `./dotfile/FILE restore_backup` | Restore this dotfile's target from its backup in `./dotfile/FILE.bak`  |
+| `./dotfile/FILE push`           | Push `./dotfile/FILE` into its target location, make a backup.         |
+| `./dotfile/FILE backup`         | Create a backup for this dotfile. Backup is in `./dotfile/FILE.bak`.   |
+| `./dotfile/FILE restore_backup` | Restore this dotfile's target from its backup in `./dotfile/FILE.bak`. |
+| `./dotfile/FILE merge_backup`   | Merge this dotfile's backup in `./dotfile/FILE.bak` into itself.       |
 
 ## How this repo works
 
@@ -49,6 +51,7 @@ If you have a file like
 ```
 
 And you do:
+
 ```bash
 # If you run this
 ./some_file
@@ -103,6 +106,7 @@ The `# target: <PATH>` line specifies where the dotfile target is.
 You are only allowed to specify one target, or the parser will throw an error.
 
 [`./dotfile/vim/.vimrc`](./dotfiles/vim/.vimrc)
+
 ```bash
 #!/usr/bin/env _copy_dotfile
 # target: ${HOME}/.vimrc
@@ -113,6 +117,7 @@ CONTENTS HERE
 For OS-specific targets, you can do something like this:
 
 [`dotfiles/vscode-forks/cursor-settings.json`](./dotfiles/vscode-forks/cursor-settings.json)
+
 ```bash
 #!/usr/bin/env _copy_dotfile
 # target[Linux]: ${HOME}/.config/Cursor/User/settings.json
@@ -124,7 +129,7 @@ For OS-specific targets, you can do something like this:
 The OS is checked with the value of `uname -s`.
 
 ```bash
-➜  dotfiles git:(main) uname -s                                                     
+➜  dotfiles git:(main) uname -s
 Linux
 
 # So your target should be
