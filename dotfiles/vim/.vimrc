@@ -2,7 +2,7 @@
 # target: ${HOME}/.vimrc
 
 " Remap esc key
-lnoremap kj <C-[>
+inoremap kj <C-[>
 inoremap jk <C-[>
 
 " " Remap movement keys to jkl; and swap up (resulting l) and down (resulting
