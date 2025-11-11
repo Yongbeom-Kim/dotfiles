@@ -93,22 +93,21 @@ if ! which -s tac &> /dev/null; then
         alias tac='tail -r'
 fi
 
+
+# fnm
+FNM_PATH="$HOME/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="$FNM_PATH:$PATH"
+  eval "`fnm env`"
+fi
+
+# pnpm
+export PNPM_HOME="/home/yongbeom_kim/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
 # Machine-Specific Configs (to be unstaged)
 
-eval "$(fnm env --use-on-cd --shell zsh)"
-
-(( ${+commands[rush]} )) && {
-  _rush_completion() {
-    compadd -- $(rush tab-complete --position ${CURSOR} --word "${BUFFER}" 2>>/dev/null)
-  }
-  compdef _rush_completion rush
-}
-# --- BEGIN FEDERATED REPO GIT TELEMETRY CODE BLOCK ---
-# https://bytedance.sg.larkoffice.com/docx/SurId67UBoZxHwxe07Clr5Ufgog
-
-export FEDERATED_REPO_GIT_TELEMETRY_VERSION=1.2.0
-export GIT_TRACE2_EVENT="$HOME/.trace2/event"
-export GIT_TRACE2_EVENT_BRIEF=true
-export GIT_TRACE2_MAX_FILES=100000
-
-# --- END FEDERATED REPO GIT TELEMETRY CODE BLOCK ---
