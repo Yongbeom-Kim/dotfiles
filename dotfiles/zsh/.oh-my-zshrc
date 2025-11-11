@@ -93,6 +93,8 @@ if ! which -s tac &> /dev/null; then
         alias tac='tail -r'
 fi
 
+## Nodejs
+
 
 # fnm
 FNM_PATH="$HOME/.local/share/fnm"
@@ -110,4 +112,3 @@ esac
 # pnpm end
 
 # Machine-Specific Configs (to be unstaged)
-
